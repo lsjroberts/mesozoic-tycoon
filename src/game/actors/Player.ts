@@ -10,6 +10,8 @@ import Actor = require('./Actor');
  */
 
 class Player extends Actor {
+    private pickedActors: Array<Actor>;
+
     pickActorAtCurrentPosition(): Actor {
         var mouse = this.getMousePosition();
 

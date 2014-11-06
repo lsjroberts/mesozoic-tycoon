@@ -1,4 +1,4 @@
-import Entity = require('../entities/Entity');
+import Entity = require('./Entity');
 
 /**
  * --------------------------------------------------------------------------
@@ -6,7 +6,7 @@ import Entity = require('../entities/Entity');
  * --------------------------------------------------------------------------
  *
  * An actor is an entity that can perform a set of actions on other entities
- * or actors within the scene.
+ * and actors within the scene and has the ability to self function.
  *
  */
 

@@ -18,7 +18,9 @@ class Entity {
     public mesh: Mesh;
 
     update(dt: number, time: number): void {
-
+        this.mesh.x = this.x;
+        this.mesh.y = this.y;
+        this.mesh.z = this.z;
     }
 }
 
