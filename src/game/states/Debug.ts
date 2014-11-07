@@ -2,8 +2,8 @@ import Mesh = require("awayjs-display/lib/entities/Mesh");
 import PrimitiveCubePrefab = require("awayjs-display/lib/prefabs/PrimitiveCubePrefab");
 import PrimitiveTorusPrefab = require("awayjs-display/lib/prefabs/PrimitiveTorusPrefab");
 import PrimitivePlanePrefab = require("awayjs-display/lib/prefabs/PrimitivePlanePrefab");
-import ShadowSoftMethod = require("awayjs-renderergl/lib/materials/methods/ShadowSoftMethod");
-import TriangleMethodMaterial = require("awayjs-stagegl/lib/materials/TriangleMethodMaterial");
+import ShadowSoftMethod = require("awayjs-methodmaterials/lib/methods/ShadowSoftMethod");
+import TriangleMethodMaterial = require("awayjs-methodmaterials/lib/TriangleMethodMaterial");
 
 import Game = require('./Game');
 

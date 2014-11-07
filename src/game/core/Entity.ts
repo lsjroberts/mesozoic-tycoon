@@ -6,21 +6,20 @@ import Mesh = require("awayjs-display/lib/entities/Mesh");
  * --------------------------------------------------------------------------
  *
  * An entity is a game object that can be present within a scene. It does
- * not necessarily need to be visible to the player, but will have a
+ * not necessarily need to be visible to the player, but may have a
  * defined position and orientation.
  *
  */
 
 class Entity {
-    public x: number;
-    public y: number;
-    public z: number;
     public mesh: Mesh;
 
-    update(dt: number, time: number): void {
-        this.mesh.x = this.x;
-        this.mesh.y = this.y;
-        this.mesh.z = this.z;
+    constructor(mesh: Mesh) {
+        this.mesh = mesh;
+    }
+
+    lookAt(entity: Entity): void {
+        this.mesh.lookAt(entity.mesh.scenePosition);
     }
 }
 

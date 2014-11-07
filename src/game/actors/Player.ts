@@ -1,4 +1,4 @@
-import Actor = require('./Actor');
+import Actor = require('../core/Actor');
 
 /**
  * --------------------------------------------------------------------------
@@ -14,6 +14,8 @@ class Player extends Actor {
 
     pickActorAtCurrentPosition(): Actor {
         var mouse = this.getMousePosition();
+
+        var actor = this;
 
         // actor = ?
 
@@ -33,6 +35,6 @@ class Player extends Actor {
     }
 
     getMousePosition(): Array<number> {
-
+        return [];
     }
 }
