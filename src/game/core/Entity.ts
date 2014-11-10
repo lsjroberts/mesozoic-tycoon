@@ -1,4 +1,6 @@
 import Mesh = require("awayjs-display/lib/entities/Mesh");
+import Scene = require("awayjs-display/lib/containers/Scene");
+import TriangleMethodMaterial = require('awayjs-methodmaterials/lib/TriangleMethodMaterial');
 
 /**
  * --------------------------------------------------------------------------
@@ -13,9 +15,14 @@ import Mesh = require("awayjs-display/lib/entities/Mesh");
 
 class Entity {
     public mesh: Mesh;
+    public material: TriangleMethodMaterial;
 
-    constructor(mesh: Mesh) {
+    constructor(mesh: Mesh, scene: Scene = null) {
         this.mesh = mesh;
+
+        if (scene) {
+            scene.addChild(mesh);
+        }
     }
 
     lookAt(entity: Entity): void {

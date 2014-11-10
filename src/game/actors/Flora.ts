@@ -1,8 +1,9 @@
 import Mesh = require("awayjs-display/lib/entities/Mesh");
+import Scene = require("awayjs-display/lib/containers/Scene");
 import PrimitiveCubePrefab = require("awayjs-display/lib/prefabs/PrimitiveCubePrefab");
 import TriangleMethodMaterial = require("awayjs-methodmaterials/lib/TriangleMethodMaterial");
 
-import Life = require('./Life');
+import Life = require('./NPC');
 
 /**
  * --------------------------------------------------------------------------
@@ -16,14 +17,15 @@ import Life = require('./Life');
 
 module Flora {
     export class Plant extends Life {
-        constructor() {
+        constructor(scene: Scene = null) {
             var size = 20.0,
                 mesh;
 
             mesh = <Mesh> new PrimitiveCubePrefab(size, size, size).getNewObject();
-            mesh.material = new TriangleMethodMaterial(0x66FF33, 1);
+            this.material = new TriangleMethodMaterial(0x66FF33, 1);
+            mesh.material = this.material;
 
-            super(mesh);
+            super(mesh, scene);
         }
     }
 }

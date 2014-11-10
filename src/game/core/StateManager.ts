@@ -1,38 +1,80 @@
+import _ = require('lodash');
+
 import Game = require('./Game');
 import State = require('./State');
 
 class StateManager {
     private states: Array<State> = [];
-    private currentState: State = null;
+    private active: Array<string> = [];
 
-    constructor(private game:Game) {
+    constructor(private multi: boolean = false) {
 
     }
 
-    add(name:string, state:State) {
+    add(name: string, state:State) {
         this.states[name] = state;
     }
 
-    start(name:string, ...args) {
-        var state = this.states[name];
-
-        if (this.currentState) {
-            this.currentState.destroy();
+    get(name: string): State {
+        if (!_.has(this.states, name)) {
+            throw "State '" + name + "' does not exist on state manager";
         }
 
-        if (state.init) {
+        return this.states[name];
+    }
+
+    start(name: string, ...args) {
+        var state;
+
+        if (!_.has(this.states, name)) {
+            throw "State '" + name + "' does not exist on state manager";
+        }
+
+        state = this.states[name];
+
+        if (!this.multi) this.stopAll();
+
+        if (_.has(state, 'init')) {
             state.init.apply(args);
         }
 
         state.create();
 
-        this.currentState = state;
+        this.active.push(name);
     }
 
-    update(dt: number, time: number): State {
-        this.currentState.update(dt, time);
+    stop(name: string) {
+        var state;
 
-        return this.currentState;
+        if (!_.has(this.states, name)) {
+            throw "State '" + name + "' does not exist on state manager";
+        }
+
+        if (!_.contains(this.active, name)) {
+            throw "State '" + name + "' is not active and can not be stopped";
+        }
+
+        state = this.states[name];
+
+        state.destroy();
+
+        _.remove(this.active, (n) => { return n === name; });
+    }
+
+    stopAll(): void {
+        _.each(this.active, (n) => {
+            this.stop(n);
+        });
+    }
+
+    update(dt: number, time: number): any {
+        _.each(this.active, (n) => {
+            this.states[n].update(dt, time);
+        });
+
+        return (!this.multi && this.active.length)
+            ? this.active
+            : this.active;
     }
 }
 

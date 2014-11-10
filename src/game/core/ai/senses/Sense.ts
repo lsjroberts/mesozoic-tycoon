@@ -1,0 +1,5 @@
+class Sense {
+
+}
+
+export = Sense;

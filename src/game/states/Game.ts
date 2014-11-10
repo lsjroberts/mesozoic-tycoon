@@ -1,6 +1,7 @@
 import View = require("awayjs-display/lib/containers/View");
 import Scene = require("awayjs-display/lib/containers/Scene");
 import Camera = require("awayjs-display/lib/entities/Camera");
+import PointLight = require("awayjs-display/lib/entities/PointLight");
 import DefaultRenderer = require("awayjs-renderergl/lib/DefaultRenderer");
 import DirectionalLight = require("awayjs-display/lib/entities/DirectionalLight");
 import HoverController = require("awayjs-display/lib/controllers/HoverController");
@@ -27,6 +28,8 @@ module Game {
         private lastMouseX: number;
         private lastMouseY: number;
         private isCameraMoving: boolean;
+        private minCameraDistance: number = 300;
+        private maxCameraDistance: number = 800;
 
         create() {
             this.initDefaultEngine();
@@ -51,11 +54,11 @@ module Game {
 
         initDefaultCamera(): void {
             this.cameraController = new HoverController(this.camera);
-            this.cameraController.distance = 1000;
-            this.cameraController.minTiltAngle = 0;
-            this.cameraController.maxTiltAngle = 90;
+            this.cameraController.distance = this.maxCameraDistance;
+            this.cameraController.minTiltAngle = 10;
+            this.cameraController.maxTiltAngle = 60;
             this.cameraController.panAngle = 45;
-            this.cameraController.tiltAngle = 20;
+            this.cameraController.tiltAngle = 60;
         }
 
         initDefaultLights(): void {
@@ -79,22 +82,23 @@ module Game {
         }
 
         initDefaultListeners(): void {
-            window.onresize = (event:UIEvent) => this.onResize(event);
+            window.onresize = (event: UIEvent) => this.onResize(event);
             this.onResize();
 
-            document.onmousedown = (event:MouseEvent) => this.onMouseDown(event);
-            document.onmouseup = (event:MouseEvent) => this.onMouseUp(event);
-            document.onmousemove = (event:MouseEvent) => this.onMouseMove(event);
+            document.onmousedown = (event: MouseEvent) => this.onMouseDown(event);
+            document.onmouseup = (event: MouseEvent) => this.onMouseUp(event);
+            document.onmousemove = (event: MouseEvent) => this.onMouseMove(event);
+            document.onmousewheel = (event: MouseWheelEvent) => this.onMouseWheel(event);
         }
 
-        private onResize(event:UIEvent = null): void {
+        private onResize(event: UIEvent = null): void {
             this.view.x = 0;
             this.view.y = 0;
             this.view.width = window.innerWidth;
             this.view.height = window.innerHeight;
         }
 
-        private onMouseDown(event:MouseEvent): void {
+        private onMouseDown(event: MouseEvent): any {
             this.lastPanAngle = this.cameraController.panAngle;
             this.lastTiltAngle = this.cameraController.tiltAngle;
             this.lastMouseX = event.clientX;
@@ -102,15 +106,32 @@ module Game {
             this.isCameraMoving = true;
         }
 
-        private onMouseUp(event:MouseEvent): void {
+        private onMouseUp(event: MouseEvent): any {
             this.isCameraMoving = false;
         }
 
-        private onMouseMove(event:MouseEvent): void {
+        private onMouseMove(event: MouseEvent): any {
             if (this.isCameraMoving) {
-                this.cameraController.panAngle = 0.3*(event.clientX - this.lastMouseX) + this.lastPanAngle;
-                this.cameraController.tiltAngle = 0.3*(event.clientY - this.lastMouseY) + this.lastTiltAngle;
+                //this.cameraController.panAngle = .3 * (event.clientX - this.lastMouseX) + this.lastPanAngle;
+                //this.cameraController.tiltAngle = .3 * (event.clientY - this.lastMouseY) + this.lastTiltAngle;
+
+                //this.cameraController.
             }
+        }
+
+        private onMouseWheel(event: MouseWheelEvent): any {
+            var ratio;
+
+            this.cameraController.distance -= .3 * event.wheelDelta;
+
+            if (this.cameraController.distance < this.minCameraDistance) {
+                this.cameraController.distance = this.minCameraDistance;
+            } else if (this.cameraController.distance > this.maxCameraDistance) {
+                this.cameraController.distance = this.maxCameraDistance;
+            }
+
+            ratio = (this.cameraController.distance - this.minCameraDistance) / (this.maxCameraDistance - this.minCameraDistance);
+            this.cameraController.tiltAngle = ratio * (this.cameraController.maxTiltAngle - this.cameraController.minTiltAngle);
         }
     }
 }
